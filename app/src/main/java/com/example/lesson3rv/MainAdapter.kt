@@ -5,30 +5,26 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.lesson3rv.databinding.MainItemBinding
 
 class MainAdapter(val onClick:(String)-> Unit):RecyclerView.Adapter<MainAdapter.MainViewHolder>() {
 
-    var list= mutableListOf<String>()
+    var list= mutableListOf<MainModel>()
     set(value) {
         field=value
         notifyDataSetChanged()
-
     }
 
-
-
-
- //   fun setList(list: MutableList<String>){
-  //      this.list=list
-  //  }
-
-    class MainViewHolder(view: View):RecyclerView.ViewHolder(view)
-
+    class MainViewHolder(view: View):RecyclerView.ViewHolder(view){
+        lateinit var binding: MainItemBinding
+        constructor(b: MainItemBinding) : this(b.root) {
+            binding = b
+        }
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainViewHolder {
-        val view=LayoutInflater.from(parent.context).inflate(R.layout.main_item,parent,false)
-
-        return MainViewHolder(view)
+        val mainView = MainItemBinding.inflate(LayoutInflater.from(parent.context))
+        return MainViewHolder(mainView)
     }
 
     override fun getItemCount(): Int {
@@ -36,23 +32,11 @@ class MainAdapter(val onClick:(String)-> Unit):RecyclerView.Adapter<MainAdapter.
     }
 
     override fun onBindViewHolder(holder: MainViewHolder, position: Int) {
+     holder.binding.nameText.text = list[position].name
+     holder.binding.ageText.text = list[position].age.toString()
 
-     val myText=  holder.itemView.findViewById<TextView>(R.id.txt_item)
-
-       myText.text=list[position]
-   holder.itemView.setOnClickListener {
-
-       onClick(list[position])
-
-   }
-
-
-
-
-
+     holder.itemView.setOnClickListener {
+     onClick(list[position].name)
+        }
     }
-
-
-
-
 }
